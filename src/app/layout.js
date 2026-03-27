@@ -25,7 +25,16 @@ export default function RootLayout({ children }) {
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </head>
-      <body style={{ margin: 0, padding: 0, background: "#06090F", color: "#E2E8F0", fontFamily: "var(--font-outfit), sans-serif" }}>
+
+      <body
+        style={{
+          margin: 0,
+          padding: 0,
+          background: "#06090F",
+          color: "#E2E8F0",
+          fontFamily: "var(--font-outfit), sans-serif",
+        }}
+      >
         <style>{`
           @keyframes spin{to{transform:rotate(360deg)}}
           @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
@@ -36,6 +45,7 @@ export default function RootLayout({ children }) {
           input::placeholder{color:#3E4C5E}
           *{box-sizing:border-box}
         `}</style>
+
         {children}
       </body>
     </html>
