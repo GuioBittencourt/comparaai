@@ -1,6 +1,6 @@
 {
-  "name": "compar.ai — Comparador de Ativos B3",
-  "short_name": "compar.ai",
+  "name": "compara.ai — Comparador de Ativos B3",
+  "short_name": "compara.ai",
   "description": "Compare ações e FIIs da B3 com indicadores fundamentalistas",
   "start_url": "/",
   "display": "standalone",
