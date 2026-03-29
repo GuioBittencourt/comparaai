@@ -3,7 +3,7 @@ import { useRef, useCallback } from "react";
 import { C, MN } from "../lib/theme";
 
 /* ═══════════════════════════════════════
-   CAPTURA ESTÁVEL (SEM IMAGEM PRETA)
+   CAPTURA (ANTI-IMAGEM PRETA)
    ═══════════════════════════════════════ */
 function wait(ms) {
   return new Promise((res) => setTimeout(res, ms));
@@ -15,38 +15,29 @@ async function cardToCanvas(cardRef) {
 
     const html2canvas = (await import("html2canvas")).default;
 
-    // 🔥 espera renderizar tudo (resolve imagem preta)
     await wait(150);
 
     const canvas = await html2canvas(cardRef, {
       backgroundColor: "#06090F",
       scale: 2.5,
       useCORS: true,
-      logging: false,
     });
 
     return new Promise((resolve) =>
       canvas.toBlob((blob) => resolve(blob), "image/png")
     );
   } catch (e) {
-    console.log("erro ao gerar imagem:", e);
+    console.log(e);
     return null;
   }
 }
 
 /* ═══════════════════════════════════════
-   SHARE PADRÃO
+   SHARE
    ═══════════════════════════════════════ */
 async function shareImage(blob, text) {
-  const url = "https://comparainvest.vercel.app";
-
   if (!blob) {
-    if (navigator.share) {
-      await navigator.share({ text });
-    } else {
-      await navigator.clipboard?.writeText(text);
-      alert("Texto copiado!");
-    }
+    await navigator.share?.({ text });
     return;
   }
 
@@ -54,27 +45,15 @@ async function shareImage(blob, text) {
     type: "image/png",
   });
 
-  if (navigator.share && navigator.canShare?.({ files: [file] })) {
-    await navigator.share({
-      text,
-      files: [file],
-    });
-  } else if (navigator.share) {
-    await navigator.share({ text });
+  if (navigator.canShare?.({ files: [file] })) {
+    await navigator.share({ text, files: [file] });
   } else {
-    const blobUrl = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = blobUrl;
-    a.download = "comparainvest.png";
-    a.click();
-
-    URL.revokeObjectURL(blobUrl);
+    await navigator.share?.({ text });
   }
 }
 
 /* ═══════════════════════════════════════
-   SHARE - FILOSOFIA
+   FILOSOFIA (mantido)
    ═══════════════════════════════════════ */
 export function PhilosophyShareCard({ philosophy, score, onClose }) {
   const cardRef = useRef(null);
@@ -98,46 +77,30 @@ https://comparainvest.vercel.app`;
   }, [p, score]);
 
   return (
-    <div style={overlay} onClick={onClose}>
-      <div style={box} onClick={(e) => e.stopPropagation()}>
-        <div ref={cardRef} style={card}>
-          <div style={{ fontSize: 12, color: C.textMuted }}>
-            MINHA FILOSOFIA
-          </div>
-
-          <div style={{ fontSize: 40 }}>{p.icon}</div>
-
-          <div style={{ fontSize: 24, fontWeight: 800, color: p.color }}>
-            {p.name}
-          </div>
-
-          <div style={{ fontSize: 12, color: C.textDim, marginTop: 6 }}>
-            {p.desc}
-          </div>
-
-          <div style={{ marginTop: 10, color: p.color }}>
-            Score: {score}/100
-          </div>
-        </div>
-
-        <div style={buttons}>
-          <button style={btnPrimary} onClick={handleShare}>
-            Compartilhar
-          </button>
-          <button style={btn} onClick={onClose}>
-            Fechar
-          </button>
+    <Wrapper onClose={onClose}>
+      <div ref={cardRef} style={card}>
+        <div style={title}>MINHA FILOSOFIA</div>
+        <div style={{ fontSize: 42 }}>{p.icon}</div>
+        <div style={{ ...big, color: p.color }}>{p.name}</div>
+        <div style={desc}>{p.desc}</div>
+        <div style={{ marginTop: 10, color: p.color }}>
+          Score: {score}/100
         </div>
       </div>
-    </div>
+
+      <Buttons onShare={handleShare} onClose={onClose} />
+    </Wrapper>
   );
 }
 
 /* ═══════════════════════════════════════
-   SHARE - BATALHA
+   🔥 BATALHA (VOLTA DO PODIUM BONITO)
    ═══════════════════════════════════════ */
 export function BattleShareCard({ ranked, onClose }) {
   const cardRef = useRef(null);
+
+  const medals = ["🥇", "🥈", "🥉"];
+  const top3 = ranked.slice(0, 3);
   const winner = ranked[0];
 
   const handleShare = useCallback(async () => {
@@ -158,35 +121,73 @@ https://comparainvest.vercel.app`;
   }, [ranked, winner]);
 
   return (
-    <div style={overlay} onClick={onClose}>
-      <div style={box} onClick={(e) => e.stopPropagation()}>
-        <div ref={cardRef} style={card}>
-          <div style={{ fontSize: 12, color: C.textMuted }}>
-            MELHOR ATIVO
-          </div>
+    <Wrapper onClose={onClose}>
+      <div ref={cardRef} style={card}>
+        <div style={title}>BATALHA DE ATIVOS</div>
 
-          <div style={{ fontSize: 28, fontWeight: 800, color: C.accent }}>
-            {winner.symbol}
-          </div>
+        {/* 🏆 PODIUM */}
+        <div style={{ marginTop: 10 }}>
+          {top3.map((r, i) => (
+            <div
+              key={r.symbol}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: 6,
+                fontFamily: MN,
+              }}
+            >
+              <span style={{ fontSize: 16 }}>
+                {medals[i]} {r.symbol}
+              </span>
 
-          <div style={{ fontSize: 12, color: C.textDim }}>
-            {winner.shortName}
-          </div>
-
-          <div style={{ marginTop: 10, color: C.accent }}>
-            {winner.wins} vitórias
-          </div>
+              <span style={{ color: C.textDim }}>
+                {r.wins}V
+              </span>
+            </div>
+          ))}
         </div>
 
-        <div style={buttons}>
-          <button style={btnPrimary} onClick={handleShare}>
-            Compartilhar
-          </button>
-          <button style={btn} onClick={onClose}>
-            Fechar
-          </button>
+        {/* 🧠 FRASE */}
+        <div style={{ marginTop: 12, fontSize: 12, color: C.textDim }}>
+          Nem sempre o mais popular é o melhor
+        </div>
+
+        {/* 🏆 VENCEDOR */}
+        <div style={{ marginTop: 10, fontSize: 13 }}>
+          <strong>{winner.symbol}</strong> em 1º lugar
         </div>
       </div>
+
+      <Buttons onShare={handleShare} onClose={onClose} />
+    </Wrapper>
+  );
+}
+
+/* ═══════════════════════════════════════
+   COMPONENTES AUXILIARES
+   ═══════════════════════════════════════ */
+
+function Wrapper({ children, onClose }) {
+  return (
+    <div style={overlay} onClick={onClose}>
+      <div style={box} onClick={(e) => e.stopPropagation()}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function Buttons({ onShare, onClose }) {
+  return (
+    <div style={buttons}>
+      <button style={btnPrimary} onClick={onShare}>
+        Compartilhar
+      </button>
+      <button style={btn} onClick={onClose}>
+        Fechar
+      </button>
     </div>
   );
 }
@@ -194,6 +195,7 @@ https://comparainvest.vercel.app`;
 /* ═══════════════════════════════════════
    STYLES
    ═══════════════════════════════════════ */
+
 const overlay = {
   position: "fixed",
   inset: 0,
@@ -214,6 +216,24 @@ const card = {
   padding: 20,
   borderRadius: 16,
   textAlign: "center",
+};
+
+const title = {
+  fontSize: 11,
+  color: C.textMuted,
+  fontFamily: MN,
+  letterSpacing: "1px",
+};
+
+const big = {
+  fontSize: 24,
+  fontWeight: 800,
+};
+
+const desc = {
+  fontSize: 12,
+  color: C.textDim,
+  marginTop: 6,
 };
 
 const buttons = {
