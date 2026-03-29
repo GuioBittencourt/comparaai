@@ -2,7 +2,9 @@
 import { useRef, useCallback } from "react";
 import { C, MN, FN } from "../lib/theme";
 
-// 🚀 CAPTURA OTIMIZADA
+/* ═══════════════════════════════════════
+   CAPTURA DE IMAGEM (QUALIDADE ALTA)
+   ═══════════════════════════════════════ */
 async function cardToCanvas(cardRef) {
   try {
     if (!cardRef) return null;
@@ -11,9 +13,12 @@ async function cardToCanvas(cardRef) {
 
     const canvas = await html2canvas(cardRef, {
       backgroundColor: "#06090F",
-      scale: 3,
+      scale: window.devicePixelRatio * 2,
       useCORS: true,
       logging: false,
+      width: 360,
+      height: cardRef.offsetHeight,
+      foreignObjectRendering: true,
     });
 
     return await new Promise((resolve) =>
@@ -25,7 +30,9 @@ async function cardToCanvas(cardRef) {
   }
 }
 
-// 🚀 SHARE INTELIGENTE
+/* ═══════════════════════════════════════
+   SHARE ENGINE
+   ═══════════════════════════════════════ */
 async function shareImage(blob, text) {
   const urlBase = "https://comparainvest.vercel.app";
 
@@ -50,12 +57,13 @@ async function shareImage(blob, text) {
       await navigator.share({ text, url: urlBase });
     } else {
       const url = URL.createObjectURL(blob);
+
       const a = document.createElement("a");
       a.href = url;
       a.download = "comparainvest.png";
       a.click();
 
-      await navigator.clipboard?.writeText(text + "\n" + urlBase);
+      await navigator.clipboard?.writeText(text + "\n\n" + urlBase);
 
       URL.revokeObjectURL(url);
     }
@@ -81,11 +89,15 @@ export function PhilosophyShareCard({
 
     const blob = await cardToCanvas(cardRef.current);
 
-    const text = `Descobri minha filosofia de investidor 👀
+    const text = `Descobri como eu penso como investidor.
 
-Sou ${p.name} (Score ${score}/100)
+Meu perfil: ${p.name} (${score}/100)
 
-Descubra a sua 👇`;
+Faz mais sentido do que eu imaginava.
+
+Veja o seu:
+
+https://comparainvest.vercel.app`;
 
     await shareImage(blob, text);
   }, [p, score]);
@@ -103,16 +115,18 @@ Descubra a sua 👇`;
     <div style={overlayStyle} onClick={onClose}>
       <div style={modalStyle} onClick={(e) => e.stopPropagation()}>
         <div ref={cardRef} style={cardStyle(p.color)}>
-          <div style={{ height: 4, background: `linear-gradient(90deg, ${p.color}, transparent)` }} />
+          <div style={gradientTop(p.color)} />
 
-          <div style={{ padding: "28px 24px", textAlign: "center" }}>
-            <div style={titleStyle}>MINHA FILOSOFIA</div>
+          <div style={contentStyle}>
+            <div style={labelStyle}>ANÁLISE DE PERFIL</div>
+
             <div style={{ fontSize: 48 }}>{p.icon}</div>
-            <div style={{ ...nameStyle, color: p.color }}>{p.name}</div>
+
+            <div style={{ ...titleStyle, color: p.color }}>{p.name}</div>
 
             <div style={descStyle}>{p.desc}</div>
 
-            <div style={scoreStyle(p.color)}>Score: {score}/100</div>
+            <div style={scoreStyle(p.color)}>Score {score}/100</div>
 
             <div style={allocWrap}>
               {allocData
@@ -124,13 +138,18 @@ Descubra a sua 👇`;
                 ))}
             </div>
 
-            <div style={footerText}>comparainvest.vercel.app</div>
+            <div style={ctaSmall}>Descubra seu perfil gratuitamente</div>
+            <div style={ctaMain}>comparainvest.vercel.app</div>
           </div>
         </div>
 
         <div style={btnRow}>
-          <button style={btnPrimary} onClick={handleShare}>Compartilhar</button>
-          <button style={btnSecondary} onClick={onClose}>Fechar</button>
+          <button style={btnPrimary} onClick={handleShare}>
+            Compartilhar
+          </button>
+          <button style={btnSecondary} onClick={onClose}>
+            Fechar
+          </button>
         </div>
       </div>
     </div>
@@ -138,7 +157,7 @@ Descubra a sua 👇`;
 }
 
 /* ═══════════════════════════════════════
-   BATTLE SHARE CARD (CORRIGIDO)
+   BATTLE SHARE CARD
    ═══════════════════════════════════════ */
 export function BattleShareCard({ ranked = [], label, onClose }) {
   const cardRef = useRef(null);
@@ -147,55 +166,68 @@ export function BattleShareCard({ ranked = [], label, onClose }) {
 
   const winner = ranked[0];
   const medals = ["🥇", "🥈", "🥉"];
-  const total = ranked.length > 1
-    ? (ranked.length * (ranked.length - 1)) / 2
-    : 0;
+  const total =
+    ranked.length > 1
+      ? (ranked.length * (ranked.length - 1)) / 2
+      : 0;
 
   const handleShare = useCallback(async () => {
     if (!cardRef.current) return;
 
     const blob = await cardToCanvas(cardRef.current);
 
-    const podium = ranked
-      .slice(0, 3)
-      .map((r, i) => `${medals[i]} ${r?.symbol || "-"}`)
-      .join(" ");
+    const text = `Comparei alguns ${label}s e o resultado chamou atenção.
 
-    const text = `Batalha de ${label}s 👀
+${winner.symbol} ficou em primeiro lugar.
 
-${podium}
+Nem sempre o mais popular é o melhor.
 
-🏆 ${winner.symbol} venceu ${winner.wins || 0} de ${total} duelos
+Veja por conta própria:
 
-Compare você também 👇`;
+https://comparainvest.vercel.app`;
 
     await shareImage(blob, text);
-  }, [ranked, label, winner, total]);
+  }, [ranked, label, winner]);
 
   return (
     <div style={overlayStyle} onClick={onClose}>
       <div style={modalStyle} onClick={(e) => e.stopPropagation()}>
         <div ref={cardRef} style={cardStyle(C.accent)}>
-          <div style={{ padding: 20, textAlign: "center" }}>
-            <div style={titleStyle}>BATALHA DE {label}</div>
+          <div style={gradientTop(C.accent)} />
 
-            <div style={{ marginTop: 12 }}>
+          <div style={contentStyle}>
+            <div style={labelStyle}>
+              MELHOR {label.toUpperCase()} DO SETOR
+            </div>
+
+            <div style={winnerStyle}>{winner.symbol}</div>
+
+            <div style={subStyle}>{winner.shortName}</div>
+
+            <div style={winsStyle}>
+              {winner.wins} vitórias de {total} duelos
+            </div>
+
+            <div style={{ marginTop: 14 }}>
               {ranked.slice(0, 3).map((r, i) => (
                 <div key={i}>
-                  {medals[i]} {r.symbol} ({r.wins}V)
+                  {medals[i]} {r.symbol}
                 </div>
               ))}
             </div>
 
-            <div style={{ marginTop: 12, color: C.accent }}>
-              🏆 {winner.symbol}
-            </div>
+            <div style={ctaSmall}>Compare ativos gratuitamente</div>
+            <div style={ctaMain}>comparainvest.vercel.app</div>
           </div>
         </div>
 
         <div style={btnRow}>
-          <button style={btnPrimary} onClick={handleShare}>Compartilhar</button>
-          <button style={btnSecondary} onClick={onClose}>Fechar</button>
+          <button style={btnPrimary} onClick={handleShare}>
+            Compartilhar
+          </button>
+          <button style={btnSecondary} onClick={onClose}>
+            Fechar
+          </button>
         </div>
       </div>
     </div>
@@ -216,7 +248,10 @@ const overlayStyle = {
   padding: 16,
 };
 
-const modalStyle = { width: "100%", maxWidth: 360 };
+const modalStyle = {
+  width: "100%",
+  maxWidth: 360,
+};
 
 const cardStyle = (color) => ({
   background: "#06090F",
@@ -225,17 +260,27 @@ const cardStyle = (color) => ({
   border: `1px solid ${color}40`,
 });
 
-const titleStyle = {
-  fontSize: 10,
-  color: C.textMuted,
-  fontFamily: MN,
-  letterSpacing: "2px",
+const gradientTop = (color) => ({
+  height: 4,
+  background: `linear-gradient(90deg, ${color}, transparent)`,
+});
+
+const contentStyle = {
+  padding: "28px 24px",
+  textAlign: "center",
 };
 
-const nameStyle = {
+const labelStyle = {
+  fontSize: 10,
+  letterSpacing: "2px",
+  color: C.textMuted,
   fontFamily: MN,
-  fontSize: 24,
+};
+
+const titleStyle = {
+  fontSize: 26,
   fontWeight: 800,
+  fontFamily: MN,
 };
 
 const descStyle = {
@@ -246,8 +291,8 @@ const descStyle = {
 
 const scoreStyle = (color) => ({
   marginTop: 12,
-  color,
   fontWeight: 700,
+  color,
 });
 
 const allocWrap = {
@@ -265,22 +310,50 @@ const allocItem = (color) => ({
   fontSize: 10,
 });
 
-const footerText = {
-  marginTop: 14,
+const winnerStyle = {
+  fontSize: 30,
+  fontWeight: 800,
+  color: C.accent,
+  marginTop: 8,
+};
+
+const subStyle = {
+  fontSize: 12,
+  color: C.textDim,
+};
+
+const winsStyle = {
+  marginTop: 8,
+  fontSize: 12,
+  color: C.accent,
+};
+
+const ctaSmall = {
+  marginTop: 16,
   fontSize: 11,
   color: C.textMuted,
 };
 
-const btnRow = { display: "flex", gap: 8, marginTop: 12 };
+const ctaMain = {
+  fontSize: 12,
+  fontWeight: 700,
+  color: C.white,
+};
+
+const btnRow = {
+  display: "flex",
+  gap: 8,
+  marginTop: 12,
+};
 
 const btnPrimary = {
   flex: 1,
   padding: "12px",
   borderRadius: 12,
+  fontWeight: 700,
   background: C.accent,
   color: C.bg,
   border: "none",
-  fontWeight: 700,
   cursor: "pointer",
 };
 
