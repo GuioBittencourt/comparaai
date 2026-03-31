@@ -366,7 +366,7 @@ export default function Home() {
 
       {/* Footer */}
       <div style={{ padding: "16px 28px", borderTop: `1px solid ${C.border}`, textAlign: "center", fontSize: 10, color: C.textMuted, fontFamily: MN }}>
-        comparainvest v3.0 — Next.js + Supabase + LGPD + Comparador R2A
+        comparainvest v3.0 — Next.js + Supabase + LGPD + Comparador B3
       </div>
     </div>
   );
