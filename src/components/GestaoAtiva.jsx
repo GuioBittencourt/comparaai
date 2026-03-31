@@ -1,11 +1,16 @@
 "use client";
 import { useState, useMemo, useEffect } from "react";
-import { C, MN, FN } from "../lib/theme";
+import { C, MN, FN, PAL } from "../lib/theme";
 import { numFmt } from "../lib/utils";
-import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip as RTooltip } from "recharts";
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip as RTooltip,
+} from "recharts";
 import SponsorSlot from "./SponsorSlot";
 import { BannerFinanceiro } from "./Banners";
-import UpgradeModal from "./UpgradeModal";
 
 const PRESETS = [
   { id: "mercado", label: "Mercado / Alimentação", icon: "🛒", color: C.accent },
@@ -18,22 +23,48 @@ const PRESETS = [
 ];
 
 const HEALTHY = [
-  { label: "Contas Fixas", pct: 60, color: C.blue, desc: "Aluguel, internet, água, luz, condomínio, plano celular..." },
-  { label: "Diversão", pct: 10, color: C.purple, desc: "Lazer, restaurantes, cinema, viagens curtas..." },
-  { label: "Invest. Longo Prazo", pct: 10, color: C.accent, desc: "Ações, FIIs, Tesouro IPCA+, previdência..." },
-  { label: "Invest. Curto Prazo", pct: 15, color: C.orange, desc: "Reserva emergência, Tesouro Selic, CDB liquidez..." },
-  { label: "Estudos / Educação", pct: 5, color: "#818CF8", desc: "Cursos, livros, capacitação profissional..." },
+  {
+    label: "Contas Fixas",
+    pct: 60,
+    color: C.blue,
+    desc: "Aluguel, internet, água, luz, condomínio, plano celular...",
+  },
+  {
+    label: "Diversão",
+    pct: 10,
+    color: C.purple,
+    desc: "Lazer, restaurantes, cinema, viagens curtas...",
+  },
+  {
+    label: "Invest. Longo Prazo",
+    pct: 10,
+    color: C.accent,
+    desc: "Ações, FIIs, Tesouro IPCA+, previdência...",
+  },
+  {
+    label: "Invest. Curto Prazo",
+    pct: 15,
+    color: C.orange,
+    desc: "Reserva emergência, Tesouro Selic, CDB liquidez...",
+  },
+  {
+    label: "Estudos / Educação",
+    pct: 5,
+    color: "#818CF8",
+    desc: "Cursos, livros, capacitação profissional...",
+  },
 ];
 
 const STORAGE_KEY = "comparai_gestao";
-const FREE_MAX = 4;
 
 function loadData() {
   try {
     const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
     const now = new Date();
     const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
-    if (raw.month !== currentMonth) return { ...raw, month: currentMonth, expenses: [] };
+    if (raw.month !== currentMonth) {
+      return { ...raw, month: currentMonth, expenses: [] };
+    }
     return raw;
   } catch {
     return {};
@@ -62,7 +93,15 @@ function IncomeSetup({ onComplete, initial }) {
     <div style={{ maxWidth: 480, margin: "0 auto" }}>
       <div style={{ textAlign: "center", marginBottom: 24 }}>
         <div style={{ fontSize: 36, marginBottom: 8 }}>💰</div>
-        <h2 style={{ fontFamily: MN, fontSize: 18, fontWeight: 800, color: C.white, margin: "0 0 6px" }}>
+        <h2
+          style={{
+            fontFamily: MN,
+            fontSize: 18,
+            fontWeight: 800,
+            color: C.white,
+            margin: "0 0 6px",
+          }}
+        >
           Perfil de Gestão
         </h2>
         <p style={{ color: C.textDim, fontSize: 12, lineHeight: 1.6 }}>
@@ -70,9 +109,24 @@ function IncomeSetup({ onComplete, initial }) {
         </p>
       </div>
 
-      <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 14, padding: 20, marginBottom: 14 }}>
+      <div
+        style={{
+          background: C.card,
+          border: `1px solid ${C.border}`,
+          borderRadius: 14,
+          padding: 20,
+          marginBottom: 14,
+        }}
+      >
         <div style={{ marginBottom: 14 }}>
-          <div style={{ fontSize: 10, color: C.textMuted, fontFamily: MN, marginBottom: 4 }}>
+          <div
+            style={{
+              fontSize: 10,
+              color: C.textMuted,
+              fontFamily: MN,
+              marginBottom: 4,
+            }}
+          >
             PROFISSÃO / OCUPAÇÃO
           </div>
           <input
@@ -95,7 +149,14 @@ function IncomeSetup({ onComplete, initial }) {
         </div>
 
         <div style={{ marginBottom: 14 }}>
-          <div style={{ fontSize: 10, color: C.textMuted, fontFamily: MN, marginBottom: 4 }}>
+          <div
+            style={{
+              fontSize: 10,
+              color: C.textMuted,
+              fontFamily: MN,
+              marginBottom: 4,
+            }}
+          >
             RENDA LÍQUIDA MENSAL
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -121,7 +182,14 @@ function IncomeSetup({ onComplete, initial }) {
         </div>
 
         <div style={{ marginBottom: 14 }}>
-          <div style={{ fontSize: 10, color: C.textMuted, fontFamily: MN, marginBottom: 4 }}>
+          <div
+            style={{
+              fontSize: 10,
+              color: C.textMuted,
+              fontFamily: MN,
+              marginBottom: 4,
+            }}
+          >
             TOTAL CONTAS FIXAS
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -147,35 +215,70 @@ function IncomeSetup({ onComplete, initial }) {
         </div>
 
         {rendaNum > 0 && fixasNum > 0 && (
-          <div style={{ padding: 14, background: C.cardAlt, borderRadius: 10, border: `1px solid ${C.border}` }}>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+          <div
+            style={{
+              padding: 14,
+              background: C.cardAlt,
+              borderRadius: 10,
+              border: `1px solid ${C.border}`,
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: 6,
+              }}
+            >
               <span style={{ fontSize: 11, color: C.textDim }}>Fixas:</span>
               <span
                 style={{
                   fontFamily: MN,
                   fontSize: 12,
                   fontWeight: 700,
-                  color: fixasPct > 60 ? C.red : fixasPct > 50 ? C.yellow : C.accent,
+                  color:
+                    fixasPct > 60 ? C.red : fixasPct > 50 ? C.yellow : C.accent,
                 }}
               >
                 {numFmt(fixasPct, 1)}% da renda
               </span>
             </div>
 
-            <div style={{ height: 5, background: C.border, borderRadius: 3, marginBottom: 8, overflow: "hidden" }}>
+            <div
+              style={{
+                height: 5,
+                background: C.border,
+                borderRadius: 3,
+                marginBottom: 8,
+                overflow: "hidden",
+              }}
+            >
               <div
                 style={{
                   width: `${Math.min(100, fixasPct)}%`,
                   height: "100%",
                   borderRadius: 3,
-                  background: fixasPct > 60 ? C.red : fixasPct > 50 ? C.yellow : C.accent,
+                  background:
+                    fixasPct > 60 ? C.red : fixasPct > 50 ? C.yellow : C.accent,
                 }}
               />
             </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
               <span style={{ fontSize: 11, color: C.textDim }}>Disponível:</span>
-              <span style={{ fontFamily: MN, fontSize: 13, fontWeight: 800, color: C.accent }}>
+              <span
+                style={{
+                  fontFamily: MN,
+                  fontSize: 13,
+                  fontWeight: 800,
+                  color: C.accent,
+                }}
+              >
                 R$ {numFmt(variavel, 0)}
               </span>
             </div>
@@ -183,8 +286,23 @@ function IncomeSetup({ onComplete, initial }) {
         )}
       </div>
 
-      <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 14, padding: 16, marginBottom: 14 }}>
-        <div style={{ fontFamily: MN, fontSize: 10, color: C.textMuted, marginBottom: 8 }}>
+      <div
+        style={{
+          background: C.card,
+          border: `1px solid ${C.border}`,
+          borderRadius: 14,
+          padding: 16,
+          marginBottom: 14,
+        }}
+      >
+        <div
+          style={{
+            fontFamily: MN,
+            fontSize: 10,
+            color: C.textMuted,
+            marginBottom: 8,
+          }}
+        >
           DISTRIBUIÇÃO SAUDÁVEL
         </div>
 
@@ -203,7 +321,14 @@ function IncomeSetup({ onComplete, initial }) {
               <div style={{ fontSize: 9, color: C.textMuted }}>{d.desc}</div>
             </div>
             <div style={{ textAlign: "right" }}>
-              <span style={{ fontFamily: MN, fontSize: 13, fontWeight: 700, color: d.color }}>
+              <span
+                style={{
+                  fontFamily: MN,
+                  fontSize: 13,
+                  fontWeight: 700,
+                  color: d.color,
+                }}
+              >
                 {d.pct}%
               </span>
               {rendaNum > 0 && (
@@ -255,10 +380,12 @@ export default function GestaoAtiva({ user }) {
   const [expDesc, setExpDesc] = useState("");
   const [selPreset, setSelPreset] = useState(null);
   const [catLimit, setCatLimit] = useState("");
+  const [customName, setCustomName] = useState("");
+  const [customLimit, setCustomLimit] = useState("");
   const [editProfile, setEditProfile] = useState(false);
-  const [showUpgrade, setShowUpgrade] = useState(false);
 
   const isPremium = user?.is_premium || user?.is_admin;
+  const FREE_MAX = 4;
 
   useEffect(() => {
     saveData(data);
@@ -306,19 +433,43 @@ export default function GestaoAtiva({ user }) {
 
   const addCat = (preset, limit) => {
     if (!isPremium && categories.length >= FREE_MAX) {
-      setShowUpgrade(true);
+      alert(`Conta gratuita: máx. ${FREE_MAX} categorias. Faça upgrade!`);
       return;
     }
     if (categories.find((c) => c.id === preset.id)) return;
 
     setData((p) => ({
       ...p,
-      categories: [...(p.categories || []), { ...preset, limit: parseFloat(limit) || 0 }],
+      categories: [
+        ...(p.categories || []),
+        { ...preset, limit: parseFloat(limit) || 0 },
+      ],
     }));
 
     setShowAddCat(false);
     setSelPreset(null);
     setCatLimit("");
+    setCustomName("");
+    setCustomLimit("");
+  };
+
+  const addCustomCat = () => {
+    if (!customName.trim()) return;
+    if (!isPremium && categories.length >= FREE_MAX) {
+      alert(`Conta gratuita: máx. ${FREE_MAX} categorias. Faça upgrade!`);
+      return;
+    }
+
+    const id = `custom_${Date.now()}`;
+    addCat(
+      {
+        id,
+        label: customName.trim(),
+        icon: "📌",
+        color: C.textDim,
+      },
+      customLimit
+    );
   };
 
   const addExp = () => {
@@ -349,17 +500,30 @@ export default function GestaoAtiva({ user }) {
     catTotals[c.id] = 0;
   });
   expenses.forEach((e) => {
-    if (catTotals[e.categoryId] !== undefined) catTotals[e.categoryId] += e.value;
+    if (catTotals[e.categoryId] !== undefined) {
+      catTotals[e.categoryId] += e.value;
+    }
   });
 
   const totalLimit = categories.reduce((s, c) => s + (c.limit || 0), 0);
   const totalSpent = expenses.reduce((s, e) => s + e.value, 0);
+  const totalRem = totalLimit - totalSpent;
 
   const distData = [
     { name: "Fixas", value: fixas, fill: C.blue },
     { name: "Variáveis", value: totalSpent, fill: C.orange },
-    { name: "Disponível", value: Math.max(0, renda - fixas - totalSpent), fill: C.accent },
+    {
+      name: "Disponível",
+      value: Math.max(0, renda - fixas - totalSpent),
+      fill: C.accent,
+    },
   ].filter((d) => d.value > 0);
+
+  const healthyData = HEALTHY.map((d) => ({
+    name: d.label,
+    value: d.pct,
+    fill: d.color,
+  }));
 
   const month =
     [
@@ -381,22 +545,31 @@ export default function GestaoAtiva({ user }) {
 
   return (
     <div>
-      {showUpgrade && (
-        <UpgradeModal
-          onClose={() => setShowUpgrade(false)}
-          message={`Na conta gratuita, você pode acompanhar até ${FREE_MAX} categorias. Desbloqueie o Premium para usar categorias sem limite.`}
-        />
-      )}
-
       <BannerFinanceiro />
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 14,
+        }}
+      >
         <div>
-          <h2 style={{ fontFamily: MN, fontSize: 16, fontWeight: 800, color: C.white, margin: 0 }}>
+          <h2
+            style={{
+              fontFamily: MN,
+              fontSize: 16,
+              fontWeight: 800,
+              color: C.white,
+              margin: 0,
+            }}
+          >
             Gestão Ativa
           </h2>
           <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>{month}</p>
         </div>
+
         <button
           onClick={() => setEditProfile(true)}
           style={{
@@ -414,59 +587,174 @@ export default function GestaoAtiva({ user }) {
         </button>
       </div>
 
-      <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 14, marginBottom: 12 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
+      <div
+        style={{
+          background: C.card,
+          border: `1px solid ${C.border}`,
+          borderRadius: 12,
+          padding: 14,
+          marginBottom: 12,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: 10,
+          }}
+        >
           <div>
-            <div style={{ fontSize: 10, color: C.textMuted, fontFamily: MN, marginBottom: 2 }}>RENDA LÍQUIDA</div>
-            <div style={{ fontFamily: MN, fontSize: 18, fontWeight: 800, color: C.white }}>R$ {numFmt(renda, 0)}</div>
+            <div
+              style={{
+                fontSize: 10,
+                color: C.textMuted,
+                fontFamily: MN,
+                marginBottom: 2,
+              }}
+            >
+              RENDA LÍQUIDA
+            </div>
+            <div
+              style={{
+                fontFamily: MN,
+                fontSize: 18,
+                fontWeight: 800,
+                color: C.white,
+              }}
+            >
+              R$ {numFmt(renda, 0)}
+            </div>
           </div>
+
           <div>
-            <div style={{ fontSize: 10, color: C.textMuted, fontFamily: MN, marginBottom: 2 }}>FIXAS</div>
-            <div style={{ fontFamily: MN, fontSize: 16, fontWeight: 700, color: fixasPct > 60 ? C.red : C.text }}>
+            <div
+              style={{
+                fontSize: 10,
+                color: C.textMuted,
+                fontFamily: MN,
+                marginBottom: 2,
+              }}
+            >
+              FIXAS
+            </div>
+            <div
+              style={{
+                fontFamily: MN,
+                fontSize: 16,
+                fontWeight: 700,
+                color: fixasPct > 60 ? C.red : C.text,
+              }}
+            >
               R$ {numFmt(fixas, 0)}
             </div>
           </div>
+
           <div>
-            <div style={{ fontSize: 10, color: C.textMuted, fontFamily: MN, marginBottom: 2 }}>VARIÁVEL</div>
-            <div style={{ fontFamily: MN, fontSize: 16, fontWeight: 700, color: C.accent }}>
+            <div
+              style={{
+                fontSize: 10,
+                color: C.textMuted,
+                fontFamily: MN,
+                marginBottom: 2,
+              }}
+            >
+              VARIÁVEL
+            </div>
+            <div
+              style={{
+                fontFamily: MN,
+                fontSize: 16,
+                fontWeight: 700,
+                color: C.accent,
+              }}
+            >
               R$ {numFmt(variavel, 0)}
             </div>
           </div>
         </div>
 
         <div style={{ marginTop: 12 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: 6,
+            }}
+          >
             <span style={{ fontSize: 11, color: C.textDim }}>Fixas:</span>
             <span
               style={{
                 fontFamily: MN,
                 fontSize: 12,
                 fontWeight: 700,
-                color: fixasPct > 60 ? C.red : fixasPct > 50 ? C.yellow : C.accent,
+                color:
+                  fixasPct > 60 ? C.red : fixasPct > 50 ? C.yellow : C.accent,
               }}
             >
               {numFmt(fixasPct, 1)}% da renda
             </span>
           </div>
-          <div style={{ height: 5, background: C.border, borderRadius: 3, overflow: "hidden" }}>
+
+          <div
+            style={{
+              height: 5,
+              background: C.border,
+              borderRadius: 3,
+              overflow: "hidden",
+            }}
+          >
             <div
               style={{
                 width: `${Math.min(100, fixasPct)}%`,
                 height: "100%",
                 borderRadius: 3,
-                background: fixasPct > 60 ? C.red : fixasPct > 50 ? C.yellow : C.accent,
+                background:
+                  fixasPct > 60 ? C.red : fixasPct > 50 ? C.yellow : C.accent,
               }}
             />
           </div>
         </div>
       </div>
 
-      <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 16, marginBottom: 12 }}>
-        <div style={{ fontFamily: MN, fontSize: 10, color: C.textMuted, marginBottom: 10 }}>DISTRIBUIÇÃO DO MÊS</div>
-        {distData.length > 0 && (
-          <ResponsiveContainer width="100%" height={200}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 12,
+          marginBottom: 12,
+        }}
+      >
+        <div
+          style={{
+            background: C.card,
+            border: `1px solid ${C.border}`,
+            borderRadius: 12,
+            padding: 14,
+          }}
+        >
+          <div
+            style={{
+              fontFamily: MN,
+              fontSize: 10,
+              color: C.textMuted,
+              marginBottom: 8,
+            }}
+          >
+            DISTRIBUIÇÃO DO MÊS
+          </div>
+
+          <ResponsiveContainer width="100%" height={180}>
             <PieChart>
-              <Pie data={distData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={70} innerRadius={40}>
+              <Pie
+                data={distData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={55}
+                innerRadius={30}
+              >
                 {distData.map((d, i) => (
                   <Cell key={i} fill={d.fill} />
                 ))}
@@ -474,14 +762,53 @@ export default function GestaoAtiva({ user }) {
               <RTooltip formatter={(v) => `R$ ${numFmt(v, 0)}`} />
             </PieChart>
           </ResponsiveContainer>
-        )}
+        </div>
+
+        <div
+          style={{
+            background: C.card,
+            border: `1px solid ${C.border}`,
+            borderRadius: 12,
+            padding: 14,
+          }}
+        >
+          <div
+            style={{
+              fontFamily: MN,
+              fontSize: 10,
+              color: C.textMuted,
+              marginBottom: 8,
+            }}
+          >
+            DISTRIBUIÇÃO SAUDÁVEL
+          </div>
+
+          <ResponsiveContainer width="100%" height={180}>
+            <PieChart>
+              <Pie
+                data={healthyData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={55}
+                innerRadius={30}
+              >
+                {healthyData.map((d, i) => (
+                  <Cell key={i} fill={d.fill} />
+                ))}
+              </Pie>
+              <RTooltip formatter={(v) => `${v}%`} />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
       </div>
 
-      <div style={{ display: "flex", gap: 8, marginBottom: 14, flexWrap: "wrap" }}>
+      <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
         <button
-          onClick={() => setShowAddCat(true)}
+          onClick={() => setShowAddCat((v) => !v)}
           style={{
-            padding: "10px 14px",
+            padding: "10px 18px",
             borderRadius: 10,
             fontSize: 12,
             fontFamily: MN,
@@ -494,53 +821,51 @@ export default function GestaoAtiva({ user }) {
         >
           + Adicionar categoria
         </button>
-
-        {categories.length > 0 && (
-          <button
-            onClick={() => setShowAddExp(true)}
-            style={{
-              padding: "10px 14px",
-              borderRadius: 10,
-              fontSize: 12,
-              fontFamily: MN,
-              cursor: "pointer",
-              background: C.cardAlt,
-              color: C.text,
-              border: `1px solid ${C.border}`,
-              fontWeight: 700,
-            }}
-          >
-            + Lançar gasto
-          </button>
-        )}
       </div>
 
       {showAddCat && (
-        <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 14, marginBottom: 12 }}>
-          <div style={{ fontFamily: MN, fontSize: 11, color: C.textDim, marginBottom: 10 }}>
+        <div
+          style={{
+            background: C.card,
+            border: `1px solid ${C.border}`,
+            borderRadius: 12,
+            padding: 14,
+            marginBottom: 12,
+          }}
+        >
+          <div
+            style={{
+              fontFamily: MN,
+              fontSize: 10,
+              color: C.textMuted,
+              marginBottom: 8,
+            }}
+          >
             ESCOLHA UMA CATEGORIA
           </div>
 
-          <div style={{ display: "grid", gap: 8, marginBottom: 12 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {PRESETS.filter((p) => !categories.find((c) => c.id === p.id)).map((preset) => (
               <button
                 key={preset.id}
                 onClick={() => setSelPreset(preset)}
                 style={{
+                  padding: "10px 12px",
+                  borderRadius: 10,
+                  fontSize: 12,
+                  fontFamily: FN,
+                  cursor: "pointer",
+                  textAlign: "left",
+                  background: selPreset?.id === preset.id ? `${preset.color}12` : C.cardAlt,
+                  color: selPreset?.id === preset.id ? C.white : C.textDim,
+                  border: `1px solid ${selPreset?.id === preset.id ? preset.color : C.border}`,
                   display: "flex",
                   alignItems: "center",
                   gap: 10,
-                  padding: "10px 12px",
-                  borderRadius: 10,
-                  border: `1px solid ${selPreset?.id === preset.id ? preset.color : C.border}`,
-                  background: selPreset?.id === preset.id ? `${preset.color}10` : C.cardAlt,
-                  color: C.text,
-                  cursor: "pointer",
-                  textAlign: "left",
                 }}
               >
-                <span style={{ fontSize: 18 }}>{preset.icon}</span>
-                <span style={{ fontSize: 12 }}>{preset.label}</span>
+                <span style={{ fontSize: 16 }}>{preset.icon}</span>
+                <span>{preset.label}</span>
               </button>
             ))}
           </div>
@@ -552,153 +877,47 @@ export default function GestaoAtiva({ user }) {
             placeholder="Limite mensal da categoria (opcional)"
             style={{
               width: "100%",
+              marginTop: 10,
               padding: "10px 12px",
               background: C.cardAlt,
               border: `1px solid ${C.border}`,
               borderRadius: 10,
               color: C.text,
               fontFamily: FN,
-              marginBottom: 10,
               boxSizing: "border-box",
             }}
           />
 
-          <div style={{ display: "flex", gap: 8 }}>
+          <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
             <button
               onClick={() => selPreset && addCat(selPreset, catLimit)}
-              disabled={!selPreset}
               style={{
                 flex: 1,
                 padding: "10px 12px",
                 borderRadius: 10,
-                border: "none",
-                cursor: selPreset ? "pointer" : "not-allowed",
-                background: selPreset ? C.accent : C.border,
-                color: selPreset ? C.bg : C.textMuted,
+                fontSize: 12,
                 fontFamily: MN,
+                cursor: "pointer",
+                background: C.border,
+                color: C.textMuted,
+                border: "none",
                 fontWeight: 700,
               }}
             >
               Salvar categoria
             </button>
+
             <button
-              onClick={() => {
-                setShowAddCat(false);
-                setSelPreset(null);
-                setCatLimit("");
-              }}
+              onClick={() => setShowAddCat(false)}
               style={{
                 padding: "10px 12px",
                 borderRadius: 10,
-                border: `1px solid ${C.border}`,
+                fontSize: 12,
+                fontFamily: MN,
                 cursor: "pointer",
-                background: "transparent",
+                background: C.cardAlt,
                 color: C.textDim,
-                fontFamily: MN,
-              }}
-            >
-              Fechar
-            </button>
-          </div>
-        </div>
-      )}
-
-      {showAddExp && categories.length > 0 && (
-        <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 14, marginBottom: 12 }}>
-          <div style={{ fontFamily: MN, fontSize: 11, color: C.textDim, marginBottom: 10 }}>
-            LANÇAR GASTO
-          </div>
-
-          <select
-            value={selectedCat || ""}
-            onChange={(e) => setSelectedCat(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "10px 12px",
-              background: C.cardAlt,
-              border: `1px solid ${C.border}`,
-              borderRadius: 10,
-              color: C.text,
-              fontFamily: FN,
-              marginBottom: 10,
-              boxSizing: "border-box",
-            }}
-          >
-            <option value="">Selecione a categoria</option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.label}
-              </option>
-            ))}
-          </select>
-
-          <input
-            value={expVal}
-            onChange={(e) => setExpVal(e.target.value)}
-            type="number"
-            placeholder="Valor"
-            style={{
-              width: "100%",
-              padding: "10px 12px",
-              background: C.cardAlt,
-              border: `1px solid ${C.border}`,
-              borderRadius: 10,
-              color: C.text,
-              fontFamily: FN,
-              marginBottom: 10,
-              boxSizing: "border-box",
-            }}
-          />
-
-          <input
-            value={expDesc}
-            onChange={(e) => setExpDesc(e.target.value)}
-            placeholder="Descrição (opcional)"
-            style={{
-              width: "100%",
-              padding: "10px 12px",
-              background: C.cardAlt,
-              border: `1px solid ${C.border}`,
-              borderRadius: 10,
-              color: C.text,
-              fontFamily: FN,
-              marginBottom: 10,
-              boxSizing: "border-box",
-            }}
-          />
-
-          <div style={{ display: "flex", gap: 8 }}>
-            <button
-              onClick={addExp}
-              style={{
-                flex: 1,
-                padding: "10px 12px",
-                borderRadius: 10,
-                border: "none",
-                cursor: "pointer",
-                background: C.accent,
-                color: C.bg,
-                fontFamily: MN,
-                fontWeight: 700,
-              }}
-            >
-              Salvar gasto
-            </button>
-            <button
-              onClick={() => {
-                setShowAddExp(false);
-                setSelectedCat(null);
-                setExpVal("");
-                setExpDesc("");
-              }}
-              style={{
-                padding: "10px 12px",
-                borderRadius: 10,
                 border: `1px solid ${C.border}`,
-                cursor: "pointer",
-                background: "transparent",
-                color: C.textDim,
-                fontFamily: MN,
               }}
             >
               Fechar
@@ -709,21 +928,91 @@ export default function GestaoAtiva({ user }) {
 
       {categories.map((cat) => {
         const spent = catTotals[cat.id] || 0;
-        const remaining = (cat.limit || 0) - spent;
+        const rem = (cat.limit || 0) - spent;
         const exps = expenses.filter((e) => e.categoryId === cat.id);
 
         return (
-          <div key={cat.id} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 14, marginBottom: 10 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+          <div
+            key={cat.id}
+            style={{
+              background: C.card,
+              border: `1px solid ${C.border}`,
+              borderRadius: 12,
+              padding: 14,
+              marginBottom: 10,
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: 6,
+              }}
+            >
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ fontSize: 20 }}>{cat.icon}</span>
+                <span style={{ fontSize: 18 }}>{cat.icon}</span>
                 <div>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: C.white }}>{cat.label}</div>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: C.white }}>
+                    {cat.label}
+                  </div>
                   <div style={{ fontSize: 10, color: C.textDim }}>
                     Limite: R$ {numFmt(cat.limit || 0, 0)} • Gasto: R$ {numFmt(spent, 0)}
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div
+              style={{
+                height: 6,
+                background: C.border,
+                borderRadius: 4,
+                overflow: "hidden",
+                marginBottom: 8,
+              }}
+            >
+              <div
+                style={{
+                  width: `${cat.limit > 0 ? Math.min(100, (spent / cat.limit) * 100) : 0}%`,
+                  height: "100%",
+                  background: spent > (cat.limit || 0) ? C.red : cat.color,
+                  borderRadius: 4,
+                }}
+              />
+            </div>
+
+            <div
+              style={{
+                fontSize: 10,
+                color: rem < 0 ? C.red : C.textDim,
+                marginBottom: exps.length > 0 ? 6 : 0,
+              }}
+            >
+              {rem >= 0
+                ? `Restante: R$ ${numFmt(rem, 0)}`
+                : `Estourado em: R$ ${numFmt(Math.abs(rem), 0)}`}
+            </div>
+
+            <div style={{ display: "flex", gap: 6, marginBottom: exps.length > 0 ? 6 : 0 }}>
+              <button
+                onClick={() => {
+                  setSelectedCat(cat.id);
+                  setShowAddExp(true);
+                }}
+                style={{
+                  padding: "4px 10px",
+                  borderRadius: 5,
+                  fontSize: 9,
+                  fontFamily: MN,
+                  cursor: "pointer",
+                  background: `${cat.color}15`,
+                  color: cat.color,
+                  border: `1px solid ${cat.color}30`,
+                }}
+              >
+                + Gasto
+              </button>
 
               <button
                 onClick={() =>
@@ -747,21 +1036,6 @@ export default function GestaoAtiva({ user }) {
               </button>
             </div>
 
-            <div style={{ height: 6, background: C.border, borderRadius: 4, overflow: "hidden", marginBottom: 8 }}>
-              <div
-                style={{
-                  width: `${cat.limit > 0 ? Math.min(100, (spent / cat.limit) * 100) : 0}%`,
-                  height: "100%",
-                  background: spent > (cat.limit || 0) ? C.red : cat.color,
-                  borderRadius: 4,
-                }}
-              />
-            </div>
-
-            <div style={{ fontSize: 10, color: remaining < 0 ? C.red : C.textDim, marginBottom: exps.length > 0 ? 6 : 0 }}>
-              {remaining >= 0 ? `Restante: R$ ${numFmt(remaining, 0)}` : `Estourado em: R$ ${numFmt(Math.abs(remaining), 0)}`}
-            </div>
-
             {exps.map((exp) => (
               <div
                 key={exp.id}
@@ -781,6 +1055,7 @@ export default function GestaoAtiva({ user }) {
                     })}
                   </span>
                 </span>
+
                 <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
                   <span style={{ fontFamily: MN, fontSize: 10, color: C.red }}>
                     -R$ {numFmt(exp.value, 2)}
@@ -809,6 +1084,105 @@ export default function GestaoAtiva({ user }) {
         );
       })}
 
+      {showAddExp && (
+        <div
+          style={{
+            background: C.card,
+            border: `1px solid ${C.border}`,
+            borderRadius: 12,
+            padding: 14,
+            marginBottom: 12,
+          }}
+        >
+          <div
+            style={{
+              fontFamily: MN,
+              fontSize: 10,
+              color: C.textMuted,
+              marginBottom: 8,
+            }}
+          >
+            NOVO GASTO
+          </div>
+
+          <input
+            value={expVal}
+            onChange={(e) => setExpVal(e.target.value)}
+            type="number"
+            placeholder="Valor do gasto"
+            style={{
+              width: "100%",
+              marginBottom: 8,
+              padding: "10px 12px",
+              background: C.cardAlt,
+              border: `1px solid ${C.border}`,
+              borderRadius: 10,
+              color: C.text,
+              fontFamily: FN,
+              boxSizing: "border-box",
+            }}
+          />
+
+          <input
+            value={expDesc}
+            onChange={(e) => setExpDesc(e.target.value)}
+            placeholder="Descrição (opcional)"
+            style={{
+              width: "100%",
+              marginBottom: 8,
+              padding: "10px 12px",
+              background: C.cardAlt,
+              border: `1px solid ${C.border}`,
+              borderRadius: 10,
+              color: C.text,
+              fontFamily: FN,
+              boxSizing: "border-box",
+            }}
+          />
+
+          <div style={{ display: "flex", gap: 8 }}>
+            <button
+              onClick={addExp}
+              style={{
+                flex: 1,
+                padding: "10px 12px",
+                borderRadius: 10,
+                fontSize: 12,
+                fontFamily: MN,
+                cursor: "pointer",
+                background: C.accent,
+                color: C.bg,
+                border: "none",
+                fontWeight: 700,
+              }}
+            >
+              Salvar gasto
+            </button>
+
+            <button
+              onClick={() => {
+                setShowAddExp(false);
+                setSelectedCat(null);
+                setExpVal("");
+                setExpDesc("");
+              }}
+              style={{
+                padding: "10px 12px",
+                borderRadius: 10,
+                fontSize: 12,
+                fontFamily: MN,
+                cursor: "pointer",
+                background: C.cardAlt,
+                color: C.textDim,
+                border: `1px solid ${C.border}`,
+              }}
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      )}
+
       {categories.length === 0 && (
         <div
           style={{
@@ -820,10 +1194,24 @@ export default function GestaoAtiva({ user }) {
           }}
         >
           <div style={{ fontSize: 32, marginBottom: 8 }}>💰</div>
-          <div style={{ fontSize: 13, fontWeight: 600, color: C.white, marginBottom: 6 }}>
+          <div
+            style={{
+              fontSize: 13,
+              fontWeight: 600,
+              color: C.white,
+              marginBottom: 6,
+            }}
+          >
             Comece sua gestão ativa
           </div>
-          <div style={{ fontSize: 11, color: C.textDim, lineHeight: 1.6, marginBottom: 14 }}>
+          <div
+            style={{
+              fontSize: 11,
+              color: C.textDim,
+              lineHeight: 1.6,
+              marginBottom: 14,
+            }}
+          >
             Adicione categorias de despesas variáveis e controle seus gastos.
           </div>
           <button
@@ -847,7 +1235,15 @@ export default function GestaoAtiva({ user }) {
 
       <SponsorSlot id="gestao-bottom" />
 
-      <p style={{ textAlign: "center", fontSize: 9, color: C.textMuted, marginTop: 14, lineHeight: 1.5 }}>
+      <p
+        style={{
+          textAlign: "center",
+          fontSize: 9,
+          color: C.textMuted,
+          marginTop: 14,
+          lineHeight: 1.5,
+        }}
+      >
         comparainvest — Gestão Ativa. Gastos resetam todo início de mês.
         {!isPremium && ` Conta gratuita: máx. ${FREE_MAX} categorias.`}
       </p>
