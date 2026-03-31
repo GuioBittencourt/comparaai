@@ -140,24 +140,24 @@ border: `1px solid ${C.accent}30` }}>Perfil de Gestão →</button>
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 14 }}><div style={{ fontFamily: MN, fontSize: 9, color: C.textMuted, textAlign: "center", marginBottom: 6 }}>SAUDÁVEL</div><ResponsiveContainer width="100%" height={130}><PieChart><Pie data={healthyData} dataKey="value" cx="50%" cy="50%" outerRadius={48} innerRadius={26} paddingAngle={3} strokeWidth={0}>{healthyData.map((d, i) => <Cell key={i} fill={d.fill} />)}</Pie></PieChart></ResponsiveContainer><div style={{ display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>{HEALTHY.map((d) => <span key={d.label} style={{ fontSize: 8, fontFamily: MN, color: d.color }}>{d.pct}%</span>)}</div></div>
       </div>)}
       {categories.length > 0 && (<div style={{ background: totalRem >= 0 ? "linear-gradient(135deg,#0D3320,#0D1117)" : "linear-gradient(135deg,#3d0d0d,#0D1117)", border: `1px solid ${totalRem >= 0 ? C.accentBorder : C.red+"40"}`, borderRadius: 12, padding: 18, marginBottom: 12, textAlign: "center" }}><div style={{ fontSize: 9, color: C.textMuted, fontFamily: MN }}>SALDO VARIÁVEIS</div><div style={{ fontFamily: MN, fontSize: 28, fontWeight: 800, color: totalRem >= 0 ? C.accent : C.red }}>R$ {numFmt(Math.abs(totalRem), 2)}</div>{totalRem < 0 && <div style={{ fontSize: 10, color: C.red }}>Orçamento estourado!</div>}<div style={{ height: 4, background: C.border, borderRadius: 3, marginTop: 8, overflow: "hidden" }}><div style={{ width: `${Math.min(100, totalLimit > 0 ? (totalSpent/totalLimit)*100 : 0)}%`, height: "100%", borderRadius: 3, background: totalSpent/totalLimit > 0.9 ? C.red : totalSpent/totalLimit > 0.7 ? C.yellow : C.accent }} /></div><div style={{ display: "flex", justifyContent: "center", gap: 16, marginTop: 8 }}><span style={{ fontSize: 10, color: C.textMuted }}>Orçamento: R$ {numFmt(totalLimit, 0)}</span><span style={{ fontSize: 10, color: C.red }}>Gasto: R$ {numFmt(totalSpent, 0)}</span></div></div>)}
-      <div
+     <div
   style={{
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    gap: 12,
-    padding: "10px 14px",
+    gap: 8,
+    padding: "6px 12px",
     marginBottom: 12,
     borderRadius: 10,
     background: "linear-gradient(90deg, rgba(255,170,0,0.10), rgba(255,120,0,0.05))",
     border: "1px solid rgba(255,170,0,0.25)",
   }}
 >
-  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-    <span style={{ fontSize: 14 }}>⚡</span>
+  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+    <span style={{ fontSize: 12 }}>⚡</span>
     <span
       style={{
-        fontSize: 11,
+        fontSize: 10,
         fontFamily: MN,
         color: "#FFB020",
       }}
@@ -171,9 +171,9 @@ border: `1px solid ${C.accent}30` }}>Perfil de Gestão →</button>
       window.open("https://buy.stripe.com/cNicN52o39nt9YQ5Xx0Fi00", "_blank")
     }
     style={{
-      padding: "6px 12px",
+      padding: "5px 10px",
       borderRadius: 6,
-      fontSize: 10,
+      fontSize: 9,
       fontFamily: MN,
       fontWeight: 700,
       cursor: "pointer",
