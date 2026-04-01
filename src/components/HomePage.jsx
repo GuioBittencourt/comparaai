@@ -2,8 +2,11 @@
 import { C, MN, FN } from "../lib/theme";
 import { BannerFinanceiro, BannerRiqueza } from "./Banners";
 import SponsorSlot from "./SponsorSlot";
+import { useRouter } from "next/navigation";
 
 export default function HomePage({ user, onTrack }) {
+  const router = useRouter();
+  
   return (
     <div style={{ padding: "32px 28px", maxWidth: 700, margin: "0 auto" }}>
       <div style={{ textAlign: "center", marginBottom: 32 }}>
@@ -49,7 +52,7 @@ export default function HomePage({ user, onTrack }) {
         </div>
 
         <button
-          onClick={() => onTrack("/quiz")}
+          onClick={() => router.push("/quiz")}
           style={{
             padding: "10px 16px",
             borderRadius: 10,
