@@ -24,7 +24,7 @@ export async function POST(req) {
     return new Response(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
-  if (event.type === "checkout.session.completed") {
+    if (event.type === "checkout.session.completed") {
     const session = event.data.object;
 
     const email =
@@ -36,10 +36,25 @@ export async function POST(req) {
       return Response.json({ received: true, warning: "E-mail não encontrado." });
     }
 
+    const { data: usersData, error: usersError } =
+      await supabase.auth.admin.listUsers();
+
+    if (usersError) {
+      return new Response(`Supabase Auth Error: ${usersError.message}`, { status: 500 });
+    }
+
+    const matchedUser = usersData.users.find(
+      (user) => user.email?.toLowerCase() === email.toLowerCase()
+    );
+
+    if (!matchedUser) {
+      return Response.json({ received: true, warning: "Usuário não encontrado no Auth." });
+    }
+
     const { error } = await supabase
       .from("profiles")
       .update({ is_premium: true })
-      .eq("email", email);
+      .eq("id", matchedUser.id);
 
     if (error) {
       return new Response(`Supabase Error: ${error.message}`, { status: 500 });
