@@ -2,30 +2,16 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "../../lib/supabase";
 
 export default function PremiumSuccessPage() {
   const router = useRouter();
 
   useEffect(() => {
-    async function ativarPremium() {
-      const { data } = await supabase.auth.getUser();
-      const user = data?.user;
-
-      if (!user) {
-        router.push("/");
-        return;
-      }
-
-      await supabase
-        .from("profiles")
-        .update({ is_premium: true })
-        .eq("id", user.id);
-
+    const timer = setTimeout(() => {
       router.push("/");
-    }
+    }, 2500);
 
-    ativarPremium();
+    return () => clearTimeout(timer);
   }, [router]);
 
   return (
@@ -38,9 +24,19 @@ export default function PremiumSuccessPage() {
         background: "#0D1117",
         color: "#E6EDF3",
         fontSize: 16,
+        textAlign: "center",
+        padding: 24,
       }}
     >
-      Ativando seu Premium...
+      <div>
+        <div style={{ fontSize: 28, marginBottom: 12 }}>✅</div>
+        <div style={{ fontWeight: 700, marginBottom: 8 }}>
+          Pagamento confirmado
+        </div>
+        <div style={{ opacity: 0.8 }}>
+          Estamos processando sua ativação. Você será redirecionado em instantes.
+        </div>
+      </div>
     </div>
   );
 }
