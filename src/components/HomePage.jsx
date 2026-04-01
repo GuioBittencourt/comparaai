@@ -39,7 +39,7 @@ export default function HomePage({ user, onTrack }) {
         </div>
 
         <div style={{ fontSize: 14, color: C.white, fontWeight: 700, marginBottom: 10 }}>
-          Em menos de 1 minuto você já entende melhor seu perfil.
+          Descubra sua filosofia de investidor em menos de 1 minuto.
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 16 }}>
