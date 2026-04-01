@@ -270,12 +270,12 @@ export default function Home() {
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
 <div
   style={{
-    padding: "5px 10px",
+    padding: "4px 8px",
     borderRadius: 999,
-    fontSize: 10,
+    fontSize: 9,
     fontWeight: 700,
     fontFamily: MN,
-    letterSpacing: "0.4px",
+    letterSpacing: "0.2px",
     background: user?.is_premium ? `${C.accent}15` : `${C.yellow}12`,
     color: user?.is_premium ? C.accent : C.yellow,
     border: `1px solid ${user?.is_premium ? `${C.accent}30` : `${C.yellow}25`}`,
