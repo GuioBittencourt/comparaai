@@ -49,7 +49,7 @@ export default function HomePage({ user, onTrack }) {
         </div>
 
         <button
-          onClick={() => onTrack("/PhilosophyQuiz")}
+          onClick={() => onTrack("/quiz")}
           style={{
             padding: "10px 16px",
             borderRadius: 10,
