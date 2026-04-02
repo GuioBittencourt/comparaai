@@ -190,6 +190,7 @@ export default function Home() {
   const [quizResult, setQuizResult] = useState(null);
   const [dbAcoes, setDbAcoes] = useState(DB_A);
   const [dbFiis, setDbFiis] = useState(DB_F);
+  const [compareOpen, setCompareOpen] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -278,11 +279,11 @@ const item = {
 };
 
 const subItem = {
-  padding: "8px 8px 8px 16px",
+  padding: "10px 8px 10px 18px",
   borderRadius: 8,
   cursor: "pointer",
-  fontSize: 13,
-  color: C.textDim,
+  fontSize: 14,
+  color: C.white,
   transition: "all 0.2s"
 };
 
@@ -326,36 +327,52 @@ const subItem = {
     Home
   </div>
 
-  <div style={{ marginTop: 10, fontSize: 11, color: C.textDim }}>
-    Comparar
-  </div>
-
   <div
-    onClick={() => { setTab("acoes"); setMenuOpen(false); }}
-    style={subItem}
-    onMouseEnter={(e) => e.currentTarget.style.background = C.cardAlt}
-    onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
-  >
-    Ações
-  </div>
+  onClick={() => setCompareOpen(!compareOpen)}
+  style={{
+    ...item,
+    marginTop: 10,
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center"
+  }}
+>
+  Comparar
+  <span style={{ fontSize: 12, color: C.textDim }}>
+    {compareOpen ? "▴" : "▾"}
+  </span>
+</div>
 
-  <div
-    onClick={() => { setTab("fiis"); setMenuOpen(false); }}
-    style={subItem}
-    onMouseEnter={(e) => e.currentTarget.style.background = C.cardAlt}
-    onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
-  >
-    FIIs
-  </div>
+{compareOpen && (
+  <>
+    <div
+      onClick={() => { setTab("acoes"); setMenuOpen(false); }}
+      style={subItem}
+      onMouseEnter={(e) => e.currentTarget.style.background = C.cardAlt}
+      onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+    >
+      Ações
+    </div>
 
-  <div
-    onClick={() => { setTab("rf"); setMenuOpen(false); }}
-    style={subItem}
-    onMouseEnter={(e) => e.currentTarget.style.background = C.cardAlt}
-    onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
-  >
-    Renda Fixa
-  </div>
+    <div
+      onClick={() => { setTab("fiis"); setMenuOpen(false); }}
+      style={subItem}
+      onMouseEnter={(e) => e.currentTarget.style.background = C.cardAlt}
+      onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+    >
+      FIIs
+    </div>
+
+    <div
+      onClick={() => { setTab("rf"); setMenuOpen(false); }}
+      style={subItem}
+      onMouseEnter={(e) => e.currentTarget.style.background = C.cardAlt}
+      onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+    >
+      Renda Fixa
+    </div>
+  </>
+)}
 
   <div
     onClick={() => { setTab("carteira"); setMenuOpen(false); }}
