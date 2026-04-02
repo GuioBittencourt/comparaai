@@ -507,5 +507,5 @@ export default function Home() {
         COMPARAINVEST © • Desde 2026 — LGPD • Comparador B3 
       </div>
     </div>
-  );
+   );
 }
