@@ -548,41 +548,7 @@ const subItem = {
             </button>
           </div>
         </div>
-
-        {/* Navigation tabs - only show when not on home */}
-        {tab !== "home" && tab !== "educacao" && tab !== "admin" && (
-          <div style={{ display: "flex", gap: 0, marginTop: 16 }}>
-            {[
-              { id: "home", label: "🏠 Início" },
-              { id: "comparadores", label: "⚔️ Comparar" },
-              { id: "acoes", label: "📈 Ações", desc: "12 ind." },
-              { id: "fiis", label: "🏢 FIIs", desc: "11 ind." },
-              { id: "rf", label: "🏦 RF", desc: "8 ind." },
-              { id: "carteira", label: "💼 Carteira" },
-            ].map((t) => (
-              <button
-                key={t.id}
-                onClick={() => setTab(t.id)}
-                style={{
-                  padding: "11px 16px",
-                  fontSize: 12,
-                  fontWeight: tab === t.id ? 600 : 400,
-                  color: tab === t.id ? C.accent : C.textDim,
-                  background: "transparent",
-                  border: "none",
-                  borderBottom: tab === t.id ? `2px solid ${C.accent}` : "2px solid transparent",
-                  cursor: "pointer",
-                  fontFamily: FN,
-                  transition: "all 0.2s",
-                }}
-              >
-                {t.label} {t.desc && <span style={{ fontSize: 9, color: C.textMuted }}>({t.desc})</span>}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
+        
       {/* Content */}
       <div style={{ padding: tab === "home" ? 0 : "24px 28px", maxWidth: tab === "admin" ? 1100 : 960, margin: "0 auto" }}>
         {tab === "home" && <HomePage user={user} onTrack={handleTrack} />}
