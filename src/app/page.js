@@ -545,10 +545,11 @@ const subItem = {
               }}
             >
               Sair
-            </button>
+                        </button>
           </div>
         </div>
-        
+      </div>
+
       {/* Content */}
       <div style={{ padding: tab === "home" ? 0 : "24px 28px", maxWidth: tab === "admin" ? 1100 : 960, margin: "0 auto" }}>
         {tab === "home" && <HomePage user={user} onTrack={handleTrack} />}
