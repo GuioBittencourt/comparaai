@@ -83,7 +83,7 @@ function RegisterScreen({ onRegistered, onGoLogin }) {
   <img
     src="/logo-completo.png"
     alt="comparainvest"
-    style={{ width: 200, maxWidth: "100%", height: "auto" }}
+    style={{ width: 100, maxWidth: "100%", height: "auto" }}
   />
 </div>
         <p style={{ textAlign: "center", color: C.textDim, fontSize: 13, marginBottom: 28 }}>Crie sua conta gratuita</p>
@@ -162,7 +162,7 @@ function LoginScreen({ onLoggedIn, onGoRegister }) {
   <img
     src="/logo-completo.png"
     alt="comparainvest"
-    style={{ width: 200, maxWidth: "100%", height: "auto" }}
+    style={{ width: 100, maxWidth: "100%", height: "auto" }}
   />
 </div>
         <p style={{ textAlign: "center", color: C.textDim, fontSize: 13, marginBottom: 28 }}>{resetMode ? "Recuperar senha" : "Entrar na sua conta"}</p>
