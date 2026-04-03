@@ -496,7 +496,29 @@ const subItem = {
 
       {/* Content */}
       <div style={{ padding: tab === "home" ? 0 : "24px 28px", maxWidth: tab === "admin" ? 1100 : 960, margin: "0 auto" }}>
-        {tab === "home" && <HomePage user={user} onTrack={handleTrack} />}
+        {tab !== "home" && (
+  <div
+    style={{
+      textAlign: "center",
+      fontSize: 12,
+      fontFamily: MN,
+      color: C.textDim,
+      marginBottom: 16,
+      letterSpacing: "1px",
+    }}
+  >
+    {{
+      comparadores: "Comparar",
+      acoes: "Ações",
+      fiis: "FIIs",
+      rf: "Renda Fixa",
+      carteira: "Carteira",
+      my_philosophy: "Minha Filosofia",
+      admin: "Admin",
+    }[tab] || ""}
+  </div>
+)}
+{tab === "home" && <HomePage user={user} onTrack={handleTrack} />}
 
         {tab === "educacao" && <EducationHub onBack={() => setTab("home")} user={user} />}
 
