@@ -312,9 +312,26 @@ const subItem = {
       }}
       onClick={(e) => e.stopPropagation()}
     >
-      <div style={{ fontFamily: MN, fontSize: 16, marginBottom: 20 }}>
-        Menu
-      </div>
+      <div
+  style={{
+    display: "inline-flex",
+    alignItems: "center",
+    padding: "4px 8px",
+    borderRadius: 999,
+    fontSize: 9,
+    fontWeight: 700,
+    fontFamily: MN,
+    letterSpacing: "0.2px",
+    background: user?.is_premium ? `${C.accent}15` : `${C.yellow}12`,
+    color: user?.is_premium ? C.accent : C.yellow,
+    border: `1px solid ${user?.is_premium ? `${C.accent}30` : `${C.yellow}25`}`,
+    lineHeight: 1,
+    whiteSpace: "nowrap",
+    marginBottom: 18,
+  }}
+>
+  {user?.is_premium ? "Premium" : "Gratuito"}
+</div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
 
