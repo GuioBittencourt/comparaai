@@ -497,25 +497,29 @@ const subItem = {
       {/* Content */}
       <div style={{ padding: tab === "home" ? 0 : "24px 28px", maxWidth: tab === "admin" ? 1100 : 960, margin: "0 auto" }}>
         {tab !== "home" && (
-  <div
-    style={{
-      textAlign: "center",
-      fontSize: 12,
-      fontFamily: MN,
-      color: C.textDim,
-      marginBottom: 16,
-      letterSpacing: "1px",
-    }}
-  >
-    {{
-      comparadores: "Comparar",
-      acoes: "Ações",
-      fiis: "FIIs",
-      rf: "Renda Fixa",
-      carteira: "Carteira",
-      my_philosophy: "Minha Filosofia",
-      admin: "Admin",
-    }[tab] || ""}
+  <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+    <div
+      style={{
+        fontSize: 13,
+        fontFamily: MN,
+        color: C.white,
+        background: "rgba(255,255,255,0.05)",
+        padding: "6px 14px",
+        borderRadius: 999,
+        border: `1px solid ${C.border}`,
+        letterSpacing: "0.8px",
+      }}
+    >
+      {{
+        comparadores: "Comparar",
+        acoes: "Ações",
+        fiis: "FIIs",
+        rf: "Renda Fixa",
+        carteira: "Carteira",
+        my_philosophy: "Minha Filosofia",
+        admin: "Admin",
+      }[tab] || ""}
+    </div>
   </div>
 )}
 {tab === "home" && <HomePage user={user} onTrack={handleTrack} />}
