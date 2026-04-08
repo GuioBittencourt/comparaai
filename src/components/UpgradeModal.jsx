@@ -1,7 +1,7 @@
 "use client";
 import { C, MN, FN } from "../lib/theme";
 
-const STRIPE_PREMIUM_URL = "https://buy.stripe.com/cNicN52o39nt9YQ5Xx0Fi00";
+const PREMIUM_PAGE_URL = "/premium";
 
 export default function UpgradeModal({ onClose, message }) {
   return (
@@ -118,11 +118,9 @@ export default function UpgradeModal({ onClose, message }) {
         </div>
 
         <a
-          href={STRIPE_PREMIUM_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ textDecoration: "none", display: "block" }}
-        >
+  href={PREMIUM_PAGE_URL}
+  style={{ textDecoration: "none", display: "block" }}
+>
           <button
             style={{
               width: "100%",
