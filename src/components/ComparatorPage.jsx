@@ -13,7 +13,7 @@ const FREE_MAX_ASSETS = 2;
 const FREE_MAX_BATTLES_15D = 3;
 const BATTLE_STORAGE_KEY = "comparai_battles_15d";
 const WINDOW_MS = 15 * 24 * 60 * 60 * 1000;
-const STRIPE_PREMIUM_URL = "https://buy.stripe.com/cNicN52o39nt9YQ5Xx0Fi00";
+const PREMIUM_PAGE_URL = "/premium";
 
 function getBattleCount15d() {
   try {
@@ -136,12 +136,7 @@ export default function ComparatorPage({
             ⚡ Conta gratuita — {battlesRemaining} batalhas restantes em 15 dias | Máx. {FREE_MAX_ASSETS} ativos por batalha
           </span>
 
-          <a
-            href={STRIPE_PREMIUM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ textDecoration: "none" }}
-          >
+          <a href={PREMIUM_PAGE_URL} style={{ textDecoration: "none" }}>
             <button
               style={{
                 padding: "4px 12px",
