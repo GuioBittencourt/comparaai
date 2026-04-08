@@ -61,7 +61,7 @@ export default function ComparatorPage({
 
     if (!isPremium && selected.length >= FREE_MAX_ASSETS) {
       setUpgradeMsg(
-        `Usuários gratuitos podem comparar até ${FREE_MAX_ASSETS} ${assetLabel}s por batalha. Desbloqueie o Premium para comparar mais ativos.`
+        `Seu Plano Atual permite comparar até ${FREE_MAX_ASSETS} ${assetLabel}s por batalha. Desbloqueie o Premium para comparar mais ativos.`
       );
       setShowUpgrade(true);
       return;
@@ -71,7 +71,7 @@ export default function ComparatorPage({
       const battleCount = getBattleCount15d();
       if (battleCount >= FREE_MAX_BATTLES_15D) {
         setUpgradeMsg(
-          `Sua conta gratuita permite até ${FREE_MAX_BATTLES_15D} batalhas a cada 15 dias. Desbloqueie o Premium para comparar sem limites.`
+          `Seu Plano Atual permite até ${FREE_MAX_BATTLES_15D} batalhas a cada 15 dias. Desbloqueie o Premium para comparar sem limites.`
         );
         setShowUpgrade(true);
         return;
@@ -133,7 +133,7 @@ export default function ComparatorPage({
           }}
         >
           <span style={{ fontSize: 11, color: C.yellow }}>
-            ⚡ Conta gratuita — {battlesRemaining} batalhas restantes em 15 dias | Máx. {FREE_MAX_ASSETS} ativos por batalha
+            ⚡ Plano Atual — {battlesRemaining} batalhas restantes em 15 dias | Máx. {FREE_MAX_ASSETS} ativos por batalha
           </span>
 
           <a href={PREMIUM_PAGE_URL} style={{ textDecoration: "none" }}>
