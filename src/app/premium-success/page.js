@@ -34,7 +34,8 @@ export default function PremiumSuccessPage() {
           Pagamento confirmado
         </div>
         <div style={{ opacity: 0.8 }}>
-          Estamos processando sua ativação. Você será redirecionado em instantes.
+          Pagamento confirmado 🎉
+Seu acesso premium está sendo ativado...
         </div>
       </div>
     </div>
