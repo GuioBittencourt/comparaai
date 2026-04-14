@@ -150,7 +150,7 @@ function LoginScreen({ onLoggedIn, onGoRegister }) {
     setError(""); setResetMsg("");
     if (!validateEmail(email)) { setError("Digite um e-mail válido."); return; }
     setLoading(true);
-    const { error: resetErr } = await supabase.auth.resetPasswordForEmail(email.toLowerCase().trim(), { redirectTo: window.location.origin });
+    const { error: resetErr } = await supabase.auth.resetPasswordForEmail(email.toLowerCase().trim(), { redirectTo: `${window.location.origin}/reset-password` });
     if (resetErr) { setError(resetErr.message); } else { setResetMsg("E-mail de recuperação enviado! Verifique sua caixa."); }
     setLoading(false);
   };
