@@ -195,7 +195,7 @@ border: `1px solid ${C.accent}30` }}>Perfil de Gestão →</button>
         whiteSpace: "nowrap",
       }}
     >
-      ⚡Quero me tornar Premium!
+      ⚡ Quero me tornar Premium!
     </button>
   </div>
 )}
