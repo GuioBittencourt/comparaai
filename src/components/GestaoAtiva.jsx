@@ -127,14 +127,84 @@ export default function GestaoAtiva({ user }) {
 color: C.accent,
 border: `1px solid ${C.accent}30` }}>Perfil de Gestão →</button>
       </div>
-      <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 14, marginBottom: 12 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
-          <div><div style={{ fontSize: 9, color: C.textMuted }}>Profissão</div><div style={{ fontSize: 12, color: C.white, fontWeight: 600 }}>{profile.profissao}</div></div>
-          <div style={{ textAlign: "center" }}><div style={{ fontSize: 9, color: C.textMuted }}>Renda</div><div style={{ fontFamily: MN, fontSize: 14, fontWeight: 800, color: C.accent }}>R$ {numFmt(renda, 0)}</div></div>
-          <div style={{ textAlign: "center" }}><div style={{ fontSize: 9, color: C.textMuted }}>Fixas ({numFmt(fixasPct, 0)}%)</div><div style={{ fontFamily: MN, fontSize: 14, fontWeight: 700, color: fixasPct > 60 ? C.red : C.blue }}>R$ {numFmt(fixas, 0)}</div></div>
-          <div style={{ textAlign: "right" }}><div style={{ fontSize: 9, color: C.textMuted }}>Disponível</div><div style={{ fontFamily: MN, fontSize: 14, fontWeight: 800, color: C.accent }}>R$ {numFmt(variavel, 0)}</div></div>
-        </div>
+      <div
+  style={{
+    background: C.card,
+    border: `1px solid ${C.border}`,
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 12,
+  }}
+>
+  <div
+    style={{
+      display: "grid",
+      gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+      gap: 12,
+    }}
+  >
+    <div style={{ minWidth: 0 }}>
+      <div style={{ fontSize: 9, color: C.textMuted, marginBottom: 4 }}>Profissão</div>
+      <div
+        style={{
+          fontSize: 12,
+          color: C.white,
+          fontWeight: 600,
+          wordBreak: "break-word",
+        }}
+      >
+        {profile.profissao}
       </div>
+    </div>
+
+    <div style={{ textAlign: "right", minWidth: 0 }}>
+      <div style={{ fontSize: 9, color: C.textMuted, marginBottom: 4 }}>Renda</div>
+      <div
+        style={{
+          fontFamily: MN,
+          fontSize: 14,
+          fontWeight: 800,
+          color: C.accent,
+          whiteSpace: "nowrap",
+        }}
+      >
+        R$ {numFmt(renda, 0)}
+      </div>
+    </div>
+
+    <div style={{ minWidth: 0 }}>
+      <div style={{ fontSize: 9, color: C.textMuted, marginBottom: 4 }}>
+        Fixas ({numFmt(fixasPct, 0)}%)
+      </div>
+      <div
+        style={{
+          fontFamily: MN,
+          fontSize: 14,
+          fontWeight: 700,
+          color: fixasPct > 60 ? C.red : C.blue,
+          whiteSpace: "nowrap",
+        }}
+      >
+        R$ {numFmt(fixas, 0)}
+      </div>
+    </div>
+
+    <div style={{ textAlign: "right", minWidth: 0 }}>
+      <div style={{ fontSize: 9, color: C.textMuted, marginBottom: 4 }}>Disponível</div>
+      <div
+        style={{
+          fontFamily: MN,
+          fontSize: 14,
+          fontWeight: 800,
+          color: C.accent,
+          whiteSpace: "nowrap",
+        }}
+      >
+        R$ {numFmt(variavel, 0)}
+      </div>
+    </div>
+  </div>
+</div>
       {distData.length > 0 && (<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 14 }}><div style={{ fontFamily: MN, fontSize: 9, color: C.textMuted, textAlign: "center", marginBottom: 6 }}>SUA DISTRIBUIÇÃO</div><ResponsiveContainer width="100%" height={130}><PieChart><Pie data={distData} dataKey="value" cx="50%" cy="50%" outerRadius={48} innerRadius={26} paddingAngle={3} strokeWidth={0}>{distData.map((d, i) => <Cell key={i} fill={d.fill} />)}</Pie><RTooltip contentStyle={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 6, fontFamily: MN, fontSize: 9, color: C.text }} formatter={(v) => [`R$ ${numFmt(v, 0)}`]} /></PieChart></ResponsiveContainer><div style={{ display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>{distData.map((d) => <span key={d.name} style={{ fontSize: 8, fontFamily: MN, color: d.fill }}>{d.name}: {renda > 0 ? numFmt((d.value/renda)*100, 0) : 0}%</span>)}</div></div>
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 14 }}><div style={{ fontFamily: MN, fontSize: 9, color: C.textMuted, textAlign: "center", marginBottom: 6 }}>SAUDÁVEL</div><ResponsiveContainer width="100%" height={130}><PieChart><Pie data={healthyData} dataKey="value" cx="50%" cy="50%" outerRadius={48} innerRadius={26} paddingAngle={3} strokeWidth={0}>{healthyData.map((d, i) => <Cell key={i} fill={d.fill} />)}</Pie></PieChart></ResponsiveContainer><div style={{ display: "flex", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>{HEALTHY.map((d) => <span key={d.label} style={{ fontSize: 8, fontFamily: MN, color: d.color }}>{d.pct}%</span>)}</div></div>
