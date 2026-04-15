@@ -171,7 +171,7 @@ border: `1px solid ${C.accent}30` }}>Perfil de Gestão →</button>
         whiteSpace: "nowrap",
       }}
     >
-      R$ {numFmt(renda, 0)}
+      R${numFmt(renda, 0)}
     </div>
   </div>
 
@@ -188,7 +188,7 @@ border: `1px solid ${C.accent}30` }}>Perfil de Gestão →</button>
         whiteSpace: "nowrap",
       }}
     >
-      R$ {numFmt(fixas, 0)}
+      R${numFmt(fixas, 0)}
     </div>
   </div>
 
@@ -203,7 +203,7 @@ border: `1px solid ${C.accent}30` }}>Perfil de Gestão →</button>
         whiteSpace: "nowrap",
       }}
     >
-      R$ {numFmt(variavel, 0)}
+      R${numFmt(variavel, 0)}
     </div>
   </div>
 </div>
