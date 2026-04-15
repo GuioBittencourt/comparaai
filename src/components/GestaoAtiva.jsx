@@ -153,15 +153,20 @@ border: `1px solid ${C.accent}30` }}>Perfil de Gestão →</button>
     border: "1px solid rgba(255,170,0,0.25)",
   }}
 >
-  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-    <span style={{ fontSize: 12 }}>⚡</span>
-    <span
-      style={{
-        fontSize: 10,
-        fontFamily: MN,
-        color: "#FFB020",
-      }}
-    >
+  {!isPremium && (
+  <div
+    style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: 6,
+      padding: "4px 8px",
+      marginBottom: 12,
+      borderRadius: 10,
+      background: "linear-gradient(90deg, rgba(255,170,0,0.10), rgba(255,120,0,0.05))",
+      border: "1px solid rgba(255,170,0,0.25)",
+    }}
+  >
       Plano Atual — Limite de 4 categorias
     </span>
   </div>
